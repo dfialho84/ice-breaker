@@ -14,6 +14,7 @@ langchain-community = "*"
 langchain = "*"
 langchain-ollama = "*"
 langchainhub = "*"
+dotenv = "*"
 
 [dev-packages]
 mypy = "*"
