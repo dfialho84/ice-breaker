@@ -5,13 +5,7 @@ from langchain_ollama import ChatOllama
 from dotenv import load_dotenv
 import os
 
-information = """
-    With over 18 years of experience in software development, I am a full-stack engineer specializing in building scalable and robust applications. My expertise ranges from architecting microservices with Java and Spring Boot on the backend to developing dynamic and responsive interfaces with React and Vue.js on the frontend. I am passionate about best practices such as BDD and TDD, ensuring software quality and reliability.
-
-    I have worked on strategic projects at the Federal University of Viçosa, where I developed customized management and learning systems and led multidisciplinary teams. I have significant experience in databases, infrastructure with Docker and CI/CD, and cloud computing, with an ongoing AWS certification. My career also includes managing IT support teams and governance, improving efficiency, and organizational processes.
-
-    I am driven by the challenge of transforming complex problems into efficient and scalable solutions, always seeking innovation and continuous improvement. I am open to new opportunities where I can apply my expertise and contribute to technological growth.
-"""
+from third_parties.linkedin import scrape_linkedin_profile
 
 if __name__ == '__main__':
     load_dotenv()
@@ -27,12 +21,13 @@ if __name__ == '__main__':
         input_variables=["information"],
         template=summary_template,
     )
-    # llm = ChatOpenAI(
-    #     model_name="gpt-3.5-turbo",
-    #     temperature=0,
-    # )
+    llm = ChatOpenAI(
+        model_name="gpt-3.5-turbo",
+        temperature=0,
+    )
     # llm = ChatOllama(model="llama3",)
-    llm = ChatOllama(model="mistral",)
+    # llm = ChatOllama(model="mistral",)
     chain = summary_prompt_template | llm | StrOutputParser()
-    res = chain.invoke(input={"information": information})
+    linkedin_data = scrape_linkedin_profile(linkedin_profile_url="https://www.linkedin.com/in/diego-fialho/", mock=False)
+    res = chain.invoke(input={"information": linkedin_data})
     print(res)
