@@ -9,8 +9,7 @@ from third_parties.linkedin import scrape_linkedin_profile
 
 if __name__ == '__main__':
     load_dotenv()
-    # print(os.environ.get("OPENAI_API_KEY"))
-    print(os.environ.get("LANGCHAIN_TRACING_V2"))
+    print("Loading...")
     summary_template = """
         given the information {information} about a person from I want you to create:
         1. a short summary
@@ -21,13 +20,13 @@ if __name__ == '__main__':
         input_variables=["information"],
         template=summary_template,
     )
-    llm = ChatOpenAI(
-        model_name="gpt-3.5-turbo",
-        temperature=0,
-    )
-    # llm = ChatOllama(model="llama3",)
+    # llm = ChatOpenAI(
+    #     model_name="gpt-3.5-turbo",
+    #     temperature=0,
+    # )
+    llm = ChatOllama(model="llama3",)
     # llm = ChatOllama(model="mistral",)
     chain = summary_prompt_template | llm | StrOutputParser()
-    linkedin_data = scrape_linkedin_profile(linkedin_profile_url="https://www.linkedin.com/in/diego-fialho/", mock=False)
+    linkedin_data = scrape_linkedin_profile(linkedin_profile_url="https://www.linkedin.com/in/diego-fialho/", mock=True)
     res = chain.invoke(input={"information": linkedin_data})
     print(res)
